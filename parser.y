@@ -11,12 +11,13 @@ int yyerror(const char*); // on fonctions defined by the generator
 %}
 
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
-%start expression // main non-terminal
+%start commande // main non-terminal
 
 %left '+' '-'
 %left '*'
 %nonassoc UMOINS
 %%
+commande : expression ';'
 expression:
 expression '+' expression
 | expression '-' expression
