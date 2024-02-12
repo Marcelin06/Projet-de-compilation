@@ -11,6 +11,7 @@
 %%
 
 0|[1-9][0-9]*  { printf("lex: création token NUMBER %s\n",yytext);
+                yylval = atoi(yytext);
                 return NUMBER; }
 [ \t\r]        { ; } // separator
 \n            { printf("lex: fin de lecture");

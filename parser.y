@@ -17,15 +17,23 @@ int yyerror(const char*); // on fonctions defined by the generator
 %left '*'
 %nonassoc UMOINS
 %%
-commande : expression ';'
+commande : 
+    expression ';'
+                {printf("Resultat= %i\n", $1);}
 expression:
-expression '+' expression
-| expression '-' expression
-| expression '*' expression
-| '(' expression ')'
-| '-' expression %prec UMOINS
-| NUMBER
-;
+    expression '+' expression
+                { $$ = $1+$3; }
+    | expression '-' expression
+                { $$ = $1-$3; }
+    | expression '*' expression
+                { $$ = $1*$3; }
+    | '(' expression ')'
+                { $$ = $2; }
+    | '-' expression %prec UMOINS
+                { $$ = -$2; }
+    | NUMBER
+                { $$ = $1; }
+    ;
 
    // everything after %% is copied at the end of the generated .c
 %%
