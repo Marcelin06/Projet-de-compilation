@@ -14,7 +14,7 @@ int yyerror(const char*); // on fonctions defined by the generator
 %start commande // main non-terminal
 
 %left '+' '-'
-%left '*'
+%left '*' '/'
 %nonassoc UMOINS
 %%
 commande : 
