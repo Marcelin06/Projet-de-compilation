@@ -1,10 +1,16 @@
-CC = gcc
-CFLAGS = -g -Wall
+all: main parser.tab.c lex.yy.c
 
-all: main
-main: main.c 
-    $(CC) $(CFLAGS) $^ -o $@
+main: main.c parser.tab.c lex.yy.c
+	gcc -o main main.c parser.tab.c lex.yy.c
+
+parser.tab.c: parser.y
+	bison -d parser.y 
+
+lex.yy.c: lexeur.l
+	flex lexeur.l
+
+
 
 .PHONY: clean
 clean:
-	rm -f *.o main
+	rm -f *.o main parser.tab.c lex.yy.c parser.tab.h
