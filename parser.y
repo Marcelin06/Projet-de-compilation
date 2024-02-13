@@ -10,8 +10,12 @@ int yylex(void); // -Wall : avoid implicit call
 int yyerror(const char*); // on fonctions defined by the generator
 %}
 
-%token NUMBER // kinds of non-trivial tokens expected from the lexer
 %start commande // main non-terminal
+
+
+%union { double number };
+%token <number> NUMBER
+%type <number> expression
 
 %left '+' '-'
 %left '*' '/'
@@ -19,7 +23,7 @@ int yyerror(const char*); // on fonctions defined by the generator
 %%
 commande : 
     expression ';'
-                {printf("Resultat= %i\n", $1);}
+                {printf("Resultat= %f\n", $1);}
 expression:
     expression '+' expression
                 { $$ = $1+$3; }

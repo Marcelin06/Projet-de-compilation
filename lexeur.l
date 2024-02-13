@@ -10,8 +10,8 @@
 
 %%
 
-[0-9][0-9]*[.][0-9][0-9]*  { printf("lex: création token NUMBER %s\n",yytext);
-                yylval = atoi(yytext);
+[0-9][0-9]*[.][0-9][0-9]*  { printf("lex::NUMBER %s\n",yytext);
+                yylval.number = atof(yytext);
                 return NUMBER; }
 [ \t\r]        { ; } // separator
 \n            { printf("lex: fin de lecture");
