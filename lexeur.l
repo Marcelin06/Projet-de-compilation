@@ -5,12 +5,14 @@
 
 %{
     #include <stdio.h> // printf
+    #include "AST.h"
     #include "parser.tab.h" // token constants defined in parseur.y via #define
 %}
 
 %%
 
-0|[1-9][0-9]*  { printf("lex: création token NUMBER %s\n",yytext);
+0|[1-9][0-9]*  { printf("lex::NUMBER %s\n", yytext);
+                yylval.number = atoi(yytext);
                 return NUMBER; }
 [ \t\r]        { ; } // separator
 \n            { printf("lex: fin de lecture");

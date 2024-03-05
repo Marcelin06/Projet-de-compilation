@@ -5,11 +5,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "AST.h"
 #include "parser.tab.h"
 
 int main(void) {
-    if (!yyparse()) { // call to the parsing (and lexing) function
+    AST_comm rez;
+    if (!yyparse(&rez)) { // call to the parsing (and lexing) function
         printf("\nParsing:: c'est bien une expression arithmétique\n"); // reached if parsing follows
     }
+    print_comm(rez);
     exit(EXIT_SUCCESS);
 }
