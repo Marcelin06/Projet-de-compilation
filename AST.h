@@ -35,3 +35,6 @@ void free_comm(AST_comm t);
 /* print an AST*/
 void print_expr(AST_expr t);
 void print_comm(AST_comm t);
+
+/* affichage post-fix*/
+void affiche_code(AST_expr t);

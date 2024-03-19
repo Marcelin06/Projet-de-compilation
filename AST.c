@@ -78,3 +78,35 @@ void print_comm(AST_comm t){
   }
 
 }
+
+/* affichage code*/
+void affichage_code(AST_expr t){
+
+  if((NULL == t->left) && (NULL == t->right)){
+    printf("CsteNB %d\n", t->number);
+  }
+
+  if(t->rule == "+"){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("AddiNb");
+  }
+
+  if(t->rule == "*"){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("MultNb");
+  }
+
+  if(t->rule == "-"){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("SubiNb");
+  }
+
+  if((t->rule == "M") && (NULL == t->right)){
+    affichage_code(t->left);
+    printf("NegaNb");
+  }
+
+}
