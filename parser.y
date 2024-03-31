@@ -18,7 +18,7 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 %start commande // main non-terminal
 
 %left '+' '-'
-%left '*' '/'
+%left '*'
 %nonassoc UMOINS
 %parse-param {AST_comm *rez}
 %%
