@@ -13,6 +13,12 @@ int main(void) {
     if (!yyparse(&rez)) { // call to the parsing (and lexing) function
         printf("\nParsing:: c'est bien une expression arithmétique\n"); // reached if parsing follows
     }
+    printf("\naffichage de la commande : ");
     print_comm(rez);
+
+    printf("\n\naffichage du code assembleur : ");
+    affichage_code(rez->expr1);
+    printf("\nHalt\n");
+    
     exit(EXIT_SUCCESS);
 }
