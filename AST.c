@@ -20,8 +20,8 @@ AST_expr new_unary_expr(char rule, AST_expr son)
 }
 
 /* create an AST leaf from a value */
-AST_expr new_number_expr(double number)
-{
+
+AST_expr new_number_expr(double number){
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
     t->rule='N';
@@ -107,8 +107,5 @@ void affichage_code(AST_expr t){
   if((t->rule == 'M')){
     affichage_code(t->right);
     printf("\nNegaNb");
-  }
-
-  
-
+  } 
 }

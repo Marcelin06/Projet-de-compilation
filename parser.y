@@ -22,6 +22,7 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 %nonassoc UMOINS
 %parse-param {AST_comm *rez}
 %%
+
 commande: 
     expression ';'
                 {*rez = new_command($1);}
