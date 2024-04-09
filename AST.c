@@ -20,7 +20,7 @@ AST_expr new_unary_expr(char rule, AST_expr son)
 }
 
 /* create an AST leaf from a value */
-AST_expr new_number_expr(int number)
+AST_expr new_number_expr(double number)
 {
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
@@ -64,7 +64,7 @@ void print_expr(AST_expr t){
   if (t!=NULL) {
     printf("[ ");
     print_expr(t->left);
-    if (t->left==NULL) printf(":%d: ",t->number); else printf(":%c: ",t->rule);
+    if (t->left==NULL && NULL == t->right) printf(":%lf: ",t->number); else printf(":%c: ",t->rule);
     print_expr(t->right);
     printf("] ");
   }
@@ -81,32 +81,34 @@ void print_comm(AST_comm t){
 
 /* affichage code*/
 void affichage_code(AST_expr t){
-
+  
   if((NULL == t->left) && (NULL == t->right)){
-    printf("CsteNB %d\n", t->number);
+    printf("\nCsteNB %lf", t->number);
   }
 
-  if(t->rule == "+"){
+  if(t->rule == '+'){
     affichage_code(t->left);
     affichage_code(t->right);
-    printf("AddiNb");
+    printf("\nAddiNb");
   }
 
-  if(t->rule == "*"){
+  if(t->rule == '*'){
     affichage_code(t->left);
     affichage_code(t->right);
-    printf("MultNb");
+    printf("\nMultNb");
   }
 
-  if(t->rule == "-"){
+  if(t->rule == '-'){
     affichage_code(t->left);
     affichage_code(t->right);
-    printf("SubiNb");
+    printf("\nSubiNb");
   }
 
-  if((t->rule == "M") && (NULL == t->right)){
-    affichage_code(t->left);
-    printf("NegaNb");
+  if((t->rule == 'M')){
+    affichage_code(t->right);
+    printf("\nNegaNb");
   }
+
+  
 
 }
