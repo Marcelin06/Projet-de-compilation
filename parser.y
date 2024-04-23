@@ -7,19 +7,26 @@
 %{ // the code between %{ and %} is copied at the start of the generated .c
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdbool.h>
 int yylex(void); // -Wall : avoid implicit call
 int yyerror(const char*); // on fonctions defined by the generator
 %}
 
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
 %token BOOLEAN
+
 %token EQUALS //token for the multisymbol '=='
 %token MORE_THAN_OR_EQUALS //token for the multisymbol '>='
 %token LESS_THAN_OR_EQUALS //token for the multisymbol '<='
 %token DIFFERENT_FROM //token for the multisymbol '!='
 %token NOT
+
+
 %start commande // main non-terminal
 
+%left EQUALS MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS DIFFERENT_FROM
 %left '+' '-'
 %left '*' '/'
 %nonassoc UMOINS
