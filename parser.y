@@ -7,28 +7,34 @@
 %{ // the code between %{ and %} is copied at the start of the generated .c
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdbool.h>
 int yylex(void); // -Wall : avoid implicit call
 int yyerror(const char*); // on fonctions defined by the generator
 %}
 
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
 %token BOOLEAN
+
 %token EQUALS // token for the multisymbol "=="
 %token MORE_THAN_OR_EQUALS // token for the multisymbol ">="
 %token LESS_THAN_OR_EQUALS // token for the multisymbol "<="
 %token DIFFERENT_FROM // token for the multisymbol "!="
 %token NOT // token for !
+
 %start commande // main non-terminal
 
+%left EQUALS MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS DIFFERENT_FROM
 %left '+' '-'
 %left '*' '/'
-%left EQUALS MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS DIFFERENT_FROM
 %nonassoc UMOINS
 %nonassoc NOT
 %%
 commande : expression ';'
 expression:
-NUMBER|BOOLEAN
+NUMBER
+|BOOLEAN
 | expression '+' expression
 | expression '-' expression
 | expression '*' expression
@@ -47,6 +53,6 @@ NUMBER|BOOLEAN
    // everything after %% is copied at the end of the generated .c
 %%
 int yyerror(const char *msg){ // called by the parser if the parsing fails
-    printf("Parsing:: syntax error %s\n");
+    printf("Parsing:: syntax error %s\n", msg);
     return 1; // to distinguish with the 0 retured by the success
 }
