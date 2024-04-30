@@ -3,6 +3,7 @@
 struct _expr_tree {
   char rule;                    /* "name" of the rule/operation operation */
   int number;                   /* int  for value */
+  int boolean;
   struct _expr_tree* left;           /* NULL if unary node or leaf*/
   struct _expr_tree* right;          /* used for unary node but NULL if leaf */
 };
@@ -24,6 +25,9 @@ AST_expr new_unary_expr(char rule, AST_expr son);
 
 /* create an AST leaf from a value */
 AST_expr new_number_expr(int number);
+
+/* create an AST leaf from a boolean */
+AST_expr new_boolean_expr(int boolean);
 
 /* create an AST leaf from a value */
 AST_comm new_command(AST_expr expression);

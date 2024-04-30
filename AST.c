@@ -32,6 +32,18 @@ AST_expr new_number_expr(int number)
   return t;
 }
 
+/* create an AST leaf from a boolean */
+AST_expr new_boolean_expr(int boolean){
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule='N';
+    t->boolean=boolean;
+    t->left=NULL;
+    t->right=NULL;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
+
 /* create an AST leaf from a value */
 AST_comm new_command(AST_expr expression){
   AST_comm t =  malloc(sizeof(struct _command_tree));

@@ -2,4 +2,6 @@ Vous vous trouvez sur la branche "parser" du projet de compilation. Il s'agit d'
 
 Pour lancer le build et executer le programme
 # make
-# ./main
+
+# ./main nom_de_mon_fichier_JS
+
