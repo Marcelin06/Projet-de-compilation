@@ -32,6 +32,18 @@ AST_expr new_number_expr(double number){
   return t;
 }
 
+/* create an AST leaf from a boolean */
+AST_expr new_boolean_expr(int boolean){
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule='B';
+    t->boolean=boolean;
+    t->left=NULL;
+    t->right=NULL;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
+
 /* create an AST leaf from a value */
 AST_comm new_command(AST_expr expression){
   AST_comm t =  malloc(sizeof(struct _command_tree));
@@ -64,7 +76,22 @@ void print_expr(AST_expr t){
   if (t!=NULL) {
     printf("[ ");
     print_expr(t->left);
-    if (t->left==NULL && NULL == t->right) printf(":%lf: ",t->number); else printf(":%c: ",t->rule);
+
+    if (t->rule=='N') {
+      printf(":%lf: ",t->number);
+    }
+    else if(t->rule=='B') {
+      if(t->boolean==1){
+        printf(":True: ");
+      }
+      else{
+        printf(":False: ");
+      }      
+    }
+    else{
+      printf(":%c: ",t->rule);
+    }
+    
     print_expr(t->right);
     printf("] ");
   }
@@ -82,8 +109,22 @@ void print_comm(AST_comm t){
 /* affichage code*/
 void affichage_code(AST_expr t){
   
-  if((NULL == t->left) && (NULL == t->right)){
+  /*if((NULL == t->left) && (NULL == t->right)){
+    
     printf("\nCsteNB %lf", t->number);
+  }*/
+
+  if(t->rule == 'N'){
+    printf("\nCsteNB %lf", t->number);
+  }
+
+  if(t->rule == 'B'){
+    if(t->boolean == 1){
+      printf("\nCsteBo True ");
+    }
+    else{
+      printf("\nCsteBo False ");
+    }    
   }
 
   if(t->rule == '+'){
@@ -104,8 +145,61 @@ void affichage_code(AST_expr t){
     printf("\nSubiNb");
   }
 
+  if(t->rule == '/'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nDiviNb");
+  }
+
+  if(t->rule == '%'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nModuNb");
+  }
+
   if((t->rule == 'M')){
     affichage_code(t->right);
     printf("\nNegaNb");
   } 
+
+  if(t->rule == 'E'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nEquals");
+  }
+
+  if(t->rule == 'G'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nGrEqNb");
+  }
+
+  if(t->rule == 'L'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nLoEqNb");
+  }
+
+  if(t->rule == 'D'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nNotEql");
+  }
+
+  if(t->rule == '!'){
+    affichage_code(t->right);
+    printf("\nNot");
+  }
+
+  if(t->rule == '<'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nLoStNb");
+  }
+
+  if(t->rule == '>'){
+    affichage_code(t->left);
+    affichage_code(t->right);
+    printf("\nGrStNb");
+  }
 }

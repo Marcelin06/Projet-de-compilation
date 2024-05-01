@@ -2,4 +2,6 @@ Vous vous trouvez sur la branche "main" du projet de compilation. Il s'agit d'un
 
 Pour lancer le build et executer le programme
 # make
-# ./main
+
+# ./main nom_de_mon_fichier_JS
+
