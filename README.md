@@ -2,4 +2,6 @@ Vous vous trouvez sur la branche "code_gen" du projet de compilation. Il s'agit 
 
 Pour lancer le build et executer le programme
 # make
-# ./main
+
+# ./main nom_de_mon_fichier_JS
+
