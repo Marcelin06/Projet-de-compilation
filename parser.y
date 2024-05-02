@@ -33,9 +33,11 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 
 %start commande // main non-terminal
 
-%left EQUALS MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS DIFFERENT_FROM
+%left EQUALS DIFFERENT_FROM
+%left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
 %left '+' '-'
-%left '*'
+%left '%'
+%left '*' '/'
 %nonassoc UMOINS
 
 
@@ -45,6 +47,7 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 %nonassoc NOT
 
 %%
+
 commande:
     expression ';'
                 {*rez = new_command($1);}
@@ -61,6 +64,10 @@ expression:
                 { $$ = new_binary_expr('-',$1,$3); }
     | expression '*' expression
                 { $$ = new_binary_expr('*',$1,$3); }
+    | expression '/' expression
+                { $$ = new_binary_expr('/',$1,$3); }
+    | expression '%' expression
+                { $$ = new_binary_expr('%',$1,$3); }
     | '(' expression ')'
                 { $$ = $2; }
     | '-' expression %prec UMOINS
