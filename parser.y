@@ -23,10 +23,13 @@ int yyerror(const char*); // on fonctions defined by the generator
 %token DIFFERENT_FROM // token for the multisymbol "!="
 %token NOT // token for !
 
+
 %start commande // main non-terminal
 
-%left EQUALS MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS DIFFERENT_FROM
+%left EQUALS DIFFERENT_FROM
+%left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
 %left '+' '-'
+%left '%'
 %left '*' '/'
 %nonassoc UMOINS
 %nonassoc NOT
