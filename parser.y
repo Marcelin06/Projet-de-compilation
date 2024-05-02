@@ -48,7 +48,8 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 
 %%
 
-commande: 
+
+commande:
     expression ';'
                 {*rez = new_command($1);}
 
@@ -58,15 +59,15 @@ expression:
                 { $$ = new_boolean_expr($1); }     
     |NUMBER
                 { $$ = new_number_expr($1); }
-    |expression '+' expression
+    | expression '+' expression
                 { $$ = new_binary_expr('+',$1,$3); }
     | expression '-' expression
                 { $$ = new_binary_expr('-',$1,$3); }
     | expression '*' expression
                 { $$ = new_binary_expr('*',$1,$3); }
-    |expression '/' expression
+    | expression '/' expression
                 { $$ = new_binary_expr('/',$1,$3); }
-    |expression '%' expression
+    | expression '%' expression
                 { $$ = new_binary_expr('%',$1,$3); }
     | '(' expression ')'
                 { $$ = $2; }

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "AST.h"
+#include "AST.h" 
+#include <string.h>
+#include <math.h>
 
 /* create an AST from a root value and two AST sons */
 AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
@@ -20,7 +22,6 @@ AST_expr new_unary_expr(char rule, AST_expr son)
 }
 
 /* create an AST leaf from a value */
-
 AST_expr new_number_expr(double number){
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
@@ -77,21 +78,27 @@ void print_expr(AST_expr t){
     printf("[ ");
     print_expr(t->left);
 
-    if (t->rule=='N') {
-      printf(":%lf: ",t->number);
+    if(t->rule=='N'){
+      if(t->number >= 1000.0 || t->number <= 0.001){
+        printf(":%.3e: ",t->number);
+      }
+      else{
+        printf(":%.3lf: ",t->number);
+      }
+      
     }
-    else if(t->rule=='B') {
+    else if(t->rule=='B'){
       if(t->boolean==1){
         printf(":True: ");
       }
       else{
         printf(":False: ");
-      }      
+      }
     }
     else{
       printf(":%c: ",t->rule);
     }
-    
+
     print_expr(t->right);
     printf("] ");
   }
@@ -115,7 +122,12 @@ void affichage_code(AST_expr t){
   }*/
 
   if(t->rule == 'N'){
-    printf("\nCsteNB %lf", t->number);
+    if(t->number >= 1000.0 || t->number <= 0.001){
+      printf("\nCsteNb %.3e",t->number);
+    }
+    else{
+      printf("\nCsteNb %.3lf",t->number);
+    }
   }
 
   if(t->rule == 'B'){
