@@ -31,7 +31,7 @@ False                               { printf("lex: création token BOOLEAN %s\n"
 [!][=]                              { printf("lex: création token DIFFERENT_FROM %s\n",yytext);
                                         return DIFFERENT_FROM; } 
 [!]                                 { printf("lex: création token NOT %s\n",yytext);
-                                        return NOT; }                                                          
+                                        return NOT; }            
 [\n\t\r]                            { printf("lex: fin de lecture");
                                         return 0; } // separator
 .                                   { printf("lex: création token %s\n",yytext);
