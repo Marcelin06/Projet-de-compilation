@@ -24,7 +24,7 @@ int yyerror(const char*); // on fonctions defined by the generator
 %token NOT //token for !
 
 
-%start commande // main non-terminal
+%start program// main non-terminal
 
 %left EQUALS DIFFERENT_FROM
 %left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
@@ -34,7 +34,9 @@ int yyerror(const char*); // on fonctions defined by the generator
 %nonassoc UMOINS
 %nonassoc NOT
 %%
-commande : expression ';'
+
+program : /* empty */ | program command
+command : expression ';' 
 expression:
 NUMBER|BOOLEAN
 | expression '+' expression 
