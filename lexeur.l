@@ -14,7 +14,7 @@
 
 %%
 [0-9][0-9]*[.][0-9][0-9]*           { printf("lex: création token NUMBER %s\n",yytext);
-                                        yylval.number=strtod(yytext, NULL);
+                                        yylval.number = strtod(yytext, NULL);
                                         return NUMBER; }
 [0-9]*[.]?[0-9]+[e][-+]?[0-9]+      { printf("lex: création token NUMBER %s\n",yytext);
                                         yylval.number=strtod(yytext, NULL);
