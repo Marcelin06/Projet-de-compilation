@@ -13,15 +13,16 @@
 #include <math.h>
 #include <stdbool.h>
 int yylex(void); // -Wall : avoid implicit call
-int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
+int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generator
 %}
 
 
-%union { double number ; int boolean ; AST_expr expr ; AST_comm comm}
+%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ;}
 %token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
 %token <boolean> BOOLEAN
 %type <expr> expression 
-%type <comm> commande
+%type <comm> command
+%type <prog> program
 
 
 %token EQUALS // token for the multisymbol "=="
@@ -31,7 +32,7 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 %token NOT // token for !
 
 
-%start commande // main non-terminal
+%start program // main non-terminal
 
 %left EQUALS DIFFERENT_FROM
 %left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
@@ -42,17 +43,32 @@ int yyerror(AST_comm arg, const char*); // on fonctions defined by the generator
 
 
 
-%parse-param {AST_comm *rez}
+%parse-param {AST_prog *rez}
 
 %nonassoc NOT
 
 %%
+program : 
+    /* */
+                {
+                    
+                    AST_prog p = NULL;
+                    AST_comm c = NULL;
+                    $$ = new_prog(c, p); 
+                }
+    |command program
+                {
+                    
+                    $$ = new_prog($1, $2);  
+                    *rez = $$;              
+                } 
+    
+    ;
 
 
-commande:
+command:
     expression ';'
-                {*rez = new_command($1);}
-
+                {$$ = new_command($1);}
 expression:
 
     BOOLEAN
@@ -91,7 +107,7 @@ expression:
    // everything after %% is copied at the end of the generated .c
 %%
 
-int yyerror(AST_comm arg, const char *msg){ // called by the parser if the parsing fails
+int yyerror(AST_prog *arg, const char *msg){ // called by the parser if the parsing fails
     printf("Parsing:: syntax error %s\n");
     return 1; // to distinguish with the 0 retured by the success
 }

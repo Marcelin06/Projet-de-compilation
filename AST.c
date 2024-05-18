@@ -49,8 +49,24 @@ AST_expr new_boolean_expr(int boolean){
 AST_comm new_command(AST_expr expression){
   AST_comm t =  malloc(sizeof(struct _command_tree));
   if (t!=NULL){	/* malloc ok */
+    //t->rule = 'c';
     t->expr1 = expression;
   } else printf("ERR : MALLOC ");
+  return t;
+
+}
+
+
+/* create an AST leaf from a value */
+AST_prog new_prog(AST_comm com1, AST_prog next){
+  AST_prog t =  malloc(sizeof(struct _prog_tree));
+  
+  if (t!=NULL){	/* malloc ok */
+    //t->rule = 'p';
+    t->com1 = com1;
+    t->next = next;
+    
+  } else printf("ERR : MALLOC function new prog");
   return t;
 
 }
@@ -72,6 +88,14 @@ void free_comm(AST_comm t)
   }
 }
 
+void free_prog(AST_prog t){
+  if(NULL != t){
+    free_comm(t->com1);
+    free(t->next);
+    free(t);
+  }
+}
+
 /* infix print an AST*/
 void print_expr(AST_expr t){
   if (t!=NULL) {
@@ -79,7 +103,10 @@ void print_expr(AST_expr t){
     print_expr(t->left);
 
     if(t->rule=='N'){
-      if(t->number >= 1000.0 || t->number <= 0.001){
+      if(t->number == 0.0){
+        printf(":%.3lf: ",t->number);
+      }
+      else if(t->number >= 1000.0 || t->number <= 0.001){
         printf(":%.3e: ",t->number);
       }
       else{
@@ -102,6 +129,9 @@ void print_expr(AST_expr t){
     print_expr(t->right);
     printf("] ");
   }
+  else{
+    
+  }
 }
 void print_comm(AST_comm t){
   if (t!=NULL) {
@@ -113,6 +143,7 @@ void print_comm(AST_comm t){
 
 }
 
+
 /* affichage code*/
 void affichage_code(AST_expr t){
   
@@ -120,6 +151,9 @@ void affichage_code(AST_expr t){
     
     printf("\nCsteNB %lf", t->number);
   }*/
+
+  
+  
 
   if(t->rule == 'N'){
     if(t->number >= 1000.0 || t->number <= 0.001){
@@ -214,4 +248,30 @@ void affichage_code(AST_expr t){
     affichage_code(t->right);
     printf("\nGrStNb");
   }
+
+  
 }
+
+
+void affichage_code_prog(AST_prog p){
+  if(NULL == p || NULL == p->com1){
+    return;
+  }
+
+  affichage_code(p->com1->expr1);
+  affichage_code_prog(p->next);
+}
+
+void print_prog(AST_prog t){
+  if (t!=NULL) {
+    printf("[ ");
+    printf(":%c: ",t->rule); 
+    print_comm(t->com1);
+    print_prog(t->next);
+    
+     
+    printf("] ");
+  }
+  
+}
+
