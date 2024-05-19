@@ -17,9 +17,11 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %}
 
 
-%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ;}
+%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ; char* import; char *ident;}
 %token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
 %token <boolean> BOOLEAN
+%token <import> Import
+%token <ident> IDENT
 %type <expr> expression 
 %type <comm> command
 %type <prog> program
@@ -68,7 +70,10 @@ program :
 
 command:
     expression ';'
-                {$$ = new_command($1);}
+                {$$ = new_command('c', $1);}
+    |Import IDENT ';'
+                {   AST_expr e = NULL;
+                    $$ = new_command('i', e);}
 expression:
 
     BOOLEAN
