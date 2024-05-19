@@ -1,6 +1,6 @@
 /* file main.c
 * compilation: gcc -o compiler main.c parser.tab.c lexer.tab.c
-* result: executable
+* result: executable 
 */
 
 #include <stdio.h>
@@ -19,8 +19,9 @@ int main(int argc, char *args[]) {
     }
     
     printf("\naffichage du programme : \n");
-    print_prog(rez);
-    //free_prog(rez);
+    
+    //print_prog(rez);
+    
     printf("\n");
     exit(EXIT_SUCCESS);
 }

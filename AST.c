@@ -24,6 +24,7 @@ AST_expr new_unary_expr(char rule, AST_expr son)
 /* create an AST leaf from a value */
 AST_expr new_number_expr(double number)
 {
+
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
     t->rule='N';
@@ -31,6 +32,7 @@ AST_expr new_number_expr(double number)
     t->left=NULL;
     t->right=NULL;
   } else printf("ERR : MALLOC ");
+  
   return t;
 }
 
@@ -53,6 +55,7 @@ AST_comm new_command(AST_expr expression){
     //t->rule = 'c';
     t->expr1 = expression;
   } else printf("ERR : MALLOC ");
+  
   return t;
 
 }

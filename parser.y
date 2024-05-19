@@ -17,19 +17,23 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %}
 
 
-%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ;}
+%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ; char *import; char *ident;}
 %token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
 %token <boolean> BOOLEAN
+%token <import> Import
+%token <ident> IDENT
 %type <expr> expression 
 %type <comm> command
 %type <prog> program
 
 
-%token EQUALS // token for the multisymbol "=="
-%token MORE_THAN_OR_EQUALS // token for the multisymbol ">="
-%token LESS_THAN_OR_EQUALS // token for the multisymbol "<="
-%token DIFFERENT_FROM // token for the multisymbol "!="
-%token NOT // token for !
+
+%token EQUALS //token for the multisymbol '=='
+%token MORE_THAN_OR_EQUALS //token for the multisymbol '>='
+%token LESS_THAN_OR_EQUALS //token for the multisymbol '<='
+%token DIFFERENT_FROM //token for the multisymbol '!='
+%token NOT //token for !
+
 
 
 %start program // main non-terminal
@@ -40,8 +44,6 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %left '%'
 %left '*' '/'
 %nonassoc UMOINS
-
-
 
 %parse-param {AST_prog *rez}
 
@@ -68,6 +70,12 @@ program :
 command:
     expression ';'
                 {$$ = new_command($1);}
+    |Import IDENT ';'
+                {}
+    ;
+    
+
+
 expression:
 
     BOOLEAN
