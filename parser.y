@@ -17,11 +17,14 @@ int yyerror(const char*); // on fonctions defined by the generator
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
 %token BOOLEAN
 
-%token EQUALS // token for the multisymbol "=="
-%token MORE_THAN_OR_EQUALS // token for the multisymbol ">="
-%token LESS_THAN_OR_EQUALS // token for the multisymbol "<="
-%token DIFFERENT_FROM // token for the multisymbol "!="
-%token NOT // token for !
+%token Import
+%token IDENT
+%token EQUALS //token for the multisymbol '=='
+%token MORE_THAN_OR_EQUALS //token for the multisymbol '>='
+%token LESS_THAN_OR_EQUALS //token for the multisymbol '<='
+%token DIFFERENT_FROM //token for the multisymbol '!='
+%token NOT //token for !
+
 
 
 %start program// main non-terminal
@@ -35,8 +38,11 @@ int yyerror(const char*); // on fonctions defined by the generator
 %nonassoc NOT
 %%
 
-program : /* empty */ | program command
-command : expression ';' 
+program : /* empty */ |command program
+command : 
+expression ';' 
+|Import IDENT ';'
+
 expression:
 NUMBER
 |BOOLEAN
