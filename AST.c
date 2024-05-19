@@ -22,9 +22,7 @@ AST_expr new_unary_expr(char rule, AST_expr son)
 }
 
 /* create an AST leaf from a value */
-AST_expr new_number_expr(double number)
-{
-
+AST_expr new_number_expr(double number){
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
     t->rule='N';
@@ -32,7 +30,6 @@ AST_expr new_number_expr(double number)
     t->left=NULL;
     t->right=NULL;
   } else printf("ERR : MALLOC ");
-  
   return t;
 }
 
@@ -49,13 +46,21 @@ AST_expr new_boolean_expr(int boolean){
 }
 
 /* create an AST leaf from a value */
-AST_comm new_command(AST_expr expression){
+AST_comm new_command(char rule, AST_expr expression){
   AST_comm t =  malloc(sizeof(struct _command_tree));
   if (t!=NULL){	/* malloc ok */
-    //t->rule = 'c';
-    t->expr1 = expression;
+    t->rule = rule;
+    
+    if(rule == 'c'){
+      t->expr1 = expression;
+    }
+    if(rule == 'i'){
+   
+      t->expr1 = NULL;
+    }
+    
+    
   } else printf("ERR : MALLOC ");
-  
   return t;
 
 }
@@ -67,6 +72,7 @@ AST_prog new_prog(AST_comm com1, AST_prog next){
   
   if (t!=NULL){	/* malloc ok */
     //t->rule = 'p';
+  
     t->com1 = com1;
     t->next = next;
     
@@ -137,10 +143,12 @@ void print_expr(AST_expr t){
     
   }
 }
+
 void print_comm(AST_comm t){
-  if (t!=NULL) {
+  
+  if (t!=NULL && t->rule != 'i') {
     printf("[ ");
-    printf(":%c: ",t->rule);
+    printf(":: ");
     print_expr(t->expr1);
     printf("] ");
   }
@@ -149,8 +157,9 @@ void print_comm(AST_comm t){
 
 void print_prog(AST_prog t){
   if (t!=NULL) {
-    printf("[ ");
-    printf(":%c: ",t->rule); 
+    
+    printf("[ "); 
+    printf(":%c: ", t->rule);
     print_comm(t->com1);
     print_prog(t->next);
     
@@ -159,3 +168,4 @@ void print_prog(AST_prog t){
   }
   
 }
+

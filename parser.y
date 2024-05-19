@@ -17,7 +17,7 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %}
 
 
-%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ; char *import; char *ident;}
+%union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ; char* import; char *ident;}
 %token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
 %token <boolean> BOOLEAN
 %token <import> Import
@@ -27,13 +27,11 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %type <prog> program
 
 
-
-%token EQUALS //token for the multisymbol '=='
-%token MORE_THAN_OR_EQUALS //token for the multisymbol '>='
-%token LESS_THAN_OR_EQUALS //token for the multisymbol '<='
-%token DIFFERENT_FROM //token for the multisymbol '!='
-%token NOT //token for !
-
+%token EQUALS // token for the multisymbol "=="
+%token MORE_THAN_OR_EQUALS // token for the multisymbol ">="
+%token LESS_THAN_OR_EQUALS // token for the multisymbol "<="
+%token DIFFERENT_FROM // token for the multisymbol "!="
+%token NOT // token for !
 
 
 %start program // main non-terminal
@@ -44,6 +42,8 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %left '%'
 %left '*' '/'
 %nonassoc UMOINS
+
+
 
 %parse-param {AST_prog *rez}
 
@@ -67,22 +67,20 @@ program :
     
     ;
 
+
 command:
     expression ';'
-                {$$ = new_command($1);}
+                {$$ = new_command('c', $1);}
     |Import IDENT ';'
-                {}
-    ;
-    
-
-
+                {   AST_expr e = NULL;
+                    $$ = new_command('i', e);}
 expression:
 
     BOOLEAN
                 { $$ = new_boolean_expr($1); }     
     |NUMBER
                 { $$ = new_number_expr($1); }
-    |expression '+' expression
+    | expression '+' expression
                 { $$ = new_binary_expr('+',$1,$3); }
     | expression '-' expression
                 { $$ = new_binary_expr('-',$1,$3); }
@@ -109,7 +107,7 @@ expression:
     | expression '<' expression
                 { $$ = new_binary_expr('<',$1,$3); }
     | NOT expression %prec NOT
-                { $$ = new_unary_expr('N',$2); }
+                { $$ = new_unary_expr('!',$2); }
     ;
    // everything after %% is copied at the end of the generated .c
 %%

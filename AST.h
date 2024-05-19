@@ -38,7 +38,7 @@ AST_expr new_number_expr(double number);
 AST_expr new_boolean_expr(int boolean);
 
 /* create an AST leaf from a value */
-AST_comm new_command(AST_expr expression);
+AST_comm new_command(char rule, AST_expr expression);
 
 /* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next);
@@ -51,4 +51,9 @@ void free_prog(AST_prog t);
 /* print an AST*/
 void print_expr(AST_expr t);
 void print_comm(AST_comm t);
+
+
+
+
 void print_prog(AST_prog t);
+
