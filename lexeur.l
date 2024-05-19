@@ -36,6 +36,12 @@ False                               { printf("lex: création token BOOLEAN %s\n"
                                         return MORE_THAN_OR_EQUALS; }
 [!][=]                              { printf("lex: création token DIFFERENT_FROM %s\n",yytext);
                                         return DIFFERENT_FROM; }
+[i][m][p][o][r][t][ ]               { printf("lex: création token IMPORT %s\n",yytext);
+                                        yylval.import = yytext;
+                                        return Import;}
+[a-z,A-Z,$,_][a-z,A-Z,$,_,0-9]*     {printf("lex: création token IDENT %s\n",yytext);
+                                        yylval.ident = yytext;
+                                        return IDENT;}
 [!]                                 { printf("lex: création token NOT %s\n",yytext);
                                         return NOT; }
 [\n\t\r]                            { printf("lex: fin de lecture");
