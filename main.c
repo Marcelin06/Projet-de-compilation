@@ -20,7 +20,7 @@ int main(int argc, char *args[]) {
     
     printf("\naffichage du programme : \n");
     
-    //print_prog(rez);
+    print_prog(rez);
     
     printf("\n");
     exit(EXIT_SUCCESS);
