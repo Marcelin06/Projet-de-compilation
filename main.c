@@ -1,6 +1,6 @@
 /* file main.c
 * compilation: gcc -o compiler main.c parser.tab.c lexer.tab.c
-* result: executable
+* result: executable 
 */
 
 #include <stdio.h>
