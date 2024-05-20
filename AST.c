@@ -91,7 +91,7 @@ AST_prog new_prog(AST_comm com1, AST_prog next){
   AST_prog t =  malloc(sizeof(struct _prog_tree));
   
   if (t!=NULL){	/* malloc ok */
-    t->rule = 'p';
+    //t->rule = 'p';
    
     t->com1 = com1;
     t->next = next;
@@ -322,8 +322,8 @@ void affichage_code_prog(AST_prog p){
 }
 
 void print_prog(AST_prog t){
-  if (t!=NULL && t->com1 != NULL && t->next !=NULL) {
-    
+  if (t!=NULL && t->com1 != NULL && t->next != NULL) {
+   
     printf("[ "); 
     printf(":%c: ", t->rule);
     print_comm(t->com1);
