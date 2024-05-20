@@ -37,9 +37,10 @@ False                                   { printf("lex: création token BOOLEAN %
 [a-z,A-Z,$,_][a-z,A-Z,$,_,0-9]*         { printf("lex: création token IDENT %s\n",yytext);
                                             return IDENT; }
 [!]                                     { printf("lex: création token NOT %s\n",yytext);
-                                            return NOT; }            
-[\n\t\r]                                { printf("lex: fin de lecture");
-                                            return 0; } // separator
+                                            return NOT; }   
+[/][/].*[\n]+                           {/*commentaires sur une ligne*/} 
+[/][*]([^*]|\*+[^*/])*[*]+[/]           {/*commentaires sur +sieurs lignes*/}
+[\n\t\r]                                {/* separator */}
 .                                       { printf("lex: création token %s\n",yytext);
                                             return yytext[0]; }
 
