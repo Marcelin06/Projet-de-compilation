@@ -15,18 +15,20 @@ int yyerror(const char*); // on fonctions defined by the generator
 %}
 
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
-%token BOOLEAN
-%token Import
-%token IDENT
+%token BOOLEAN //token for boolean
+%token Import //token for key word import
+%token IDENT //token for name of variables and functions
 %token EQUALS //token for the multisymbol '=='
 %token MORE_THAN_OR_EQUALS //token for the multisymbol '>='
 %token LESS_THAN_OR_EQUALS //token for the multisymbol '<='
 %token DIFFERENT_FROM //token for the multisymbol '!='
 %token NOT //token for !
+%token AND //token for "&&"
 
 
 %start program// main non-terminal
 
+%left AND
 %left EQUALS DIFFERENT_FROM
 %left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
 %left '+' '-'
@@ -56,6 +58,7 @@ NUMBER|BOOLEAN
 | expression DIFFERENT_FROM expression
 | expression '>' expression
 | expression '<' expression
+| expression AND expression
 | NOT expression %prec NOT
 ;
    // everything after %% is copied at the end of the generated .c

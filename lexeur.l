@@ -24,6 +24,8 @@ False                                   { printf("lex: création token BOOLEAN %
                                             return BOOLEAN; }
 [=][=]                                  { printf("lex: création token EQUALS %s\n",yytext);
                                             return EQUALS; }
+[&][&]                                  { printf("lex: création token AND %s\n",yytext);
+                                            return AND; }
 [<][=]                                  { printf("lex: création token LESS_THAN_OR_EQUALS %s\n",yytext);
                                             return LESS_THAN_OR_EQUALS; }
 [>][=]                                  { printf("lex: création token MORE_THAN_OR_EQUALS %s\n",yytext);
