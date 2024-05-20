@@ -17,7 +17,6 @@ int main(int argc, char *args[]) {
         printf("\nParsing:: c'est bien une expression arithmétique\n"); // reached if parsing follows
         
     }
-    printf("\ntaille = %d\n", rez->taille);
     printf("\naffichage du programme : \n");
     
     print_prog(rez);

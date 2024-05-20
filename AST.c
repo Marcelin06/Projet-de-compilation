@@ -192,7 +192,7 @@ void print_comm(AST_comm t){
 }
 
 void print_prog(AST_prog t){
-  if (t!=NULL) {
+  if (t!=NULL && t->com1 != NULL && t->next != NULL) {
     
     printf("[ "); 
     printf(":%c: ", t->rule);
