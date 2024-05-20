@@ -4,6 +4,7 @@ struct _expr_tree {
   char rule;                    /* "name" of the rule/operation operation */
   double number;                /* double  for value */
   int boolean;                  /* 1 for true 0 for false*/
+  int taille;                   /* taille du noeud*/
   struct _expr_tree* left;      /* NULL if unary node or leaf*/
   struct _expr_tree* right;     /* used for unary node but NULL if leaf */
 };
@@ -12,6 +13,7 @@ typedef struct _expr_tree* AST_expr;
 
 struct _command_tree {
   char rule;                    /* "name" of the rule/operation operation */
+  int taille;                    /* taille du noeud*/
   AST_expr expr1;     	        /* used for command with at least one sub-expression */
 };
 
@@ -19,7 +21,8 @@ typedef struct _command_tree* AST_comm;
 
 struct _prog_tree {
   char rule;                    /* "name" of the rule/operation operation*/
-  AST_comm com1;       /* first command of the programm, NULL if any*/
+  int taille;                   /* taille du noeud*/
+  AST_comm com1;                /* first command of the programm, NULL if any*/
   struct _prog_tree* next;      /* list of program after the first command, NULL if any */
 };
 

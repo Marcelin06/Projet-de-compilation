@@ -11,6 +11,23 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
     t->rule=rule;
     t->left=left;
     t->right=right;
+
+    //pour les expressions : -exprression
+    if(rule == 'M'){
+      t->taille = 1 + t->right->taille;
+    }
+    //pour les expressions : expression && expression
+    if('A' == rule){
+      t->taille = 3 + t->left->taille + t->right->taille;
+    }
+
+    //pour les autres expressions binaires
+    if('A' != rule && 'M' != rule){
+      t->taille = 1 + t->left->taille + t->right->taille;
+    }
+
+    
+   
   } else printf("ERR : MALLOC ");
   return t;
 }
@@ -27,6 +44,7 @@ AST_expr new_number_expr(double number){
   if (t!=NULL){	/* malloc ok */
     t->rule='N';
     t->number=number;
+    t->taille = 1;
     t->left=NULL;
     t->right=NULL;
   } else printf("ERR : MALLOC ");
@@ -39,6 +57,7 @@ AST_expr new_boolean_expr(int boolean){
   if (t!=NULL){	/* malloc ok */
     t->rule='B';
     t->boolean=boolean;
+    t->taille = 1;
     t->left=NULL;
     t->right=NULL;
   } else printf("ERR : MALLOC ");
@@ -53,6 +72,7 @@ AST_comm new_command(char rule, AST_expr expression){
     
     if(rule == 'c'){
       t->expr1 = expression;
+      t->taille = t->expr1->taille;
     }
     if(rule == 'i'){
    
@@ -71,10 +91,23 @@ AST_prog new_prog(AST_comm com1, AST_prog next){
   AST_prog t =  malloc(sizeof(struct _prog_tree));
   
   if (t!=NULL){	/* malloc ok */
-    //t->rule = 'p';
-  
+    t->rule = 'p';
+   
     t->com1 = com1;
     t->next = next;
+    
+    if(NULL == t->com1 && NULL == next){
+      t->taille = 0;
+    }
+    if(NULL != t->com1 && NULL == next){
+      t->taille = t->com1->taille;
+    }
+    if(NULL == t->com1 && NULL != next){
+      t->taille = t->next->taille;
+    }
+    if(NULL != t->com1 && NULL != next){
+      t->taille = t->com1->taille + t->next->taille;
+    }
     
   } else printf("ERR : MALLOC function new prog");
   return t;
@@ -108,7 +141,9 @@ void free_prog(AST_prog t){
 
 /* infix print an AST*/
 void print_expr(AST_expr t){
+  
   if (t!=NULL) {
+    
     printf("[ ");
     print_expr(t->left);
 
@@ -147,8 +182,9 @@ void print_expr(AST_expr t){
 void print_comm(AST_comm t){
   
   if (t!=NULL && t->rule != 'i') {
+    
     printf("[ ");
-    printf(":: ");
+    printf(":%c: ", t->rule);
     print_expr(t->expr1);
     printf("] ");
   }
