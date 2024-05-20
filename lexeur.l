@@ -46,10 +46,10 @@ False                               { printf("lex: création token BOOLEAN %s\n"
                                         return IDENT;}
 [!]                                 { printf("lex: création token NOT %s\n",yytext);
                                         return NOT; }
-[\n\t\r]                            { printf("lex: fin de lecture");
-                                        return 0; } //separator
+[/][/].*[\n]+                       {/*commentaires sur une ligne*/} 
+[/][*]([^*]|\*+[^*/])*[*]+[/]       {/*commentaires sur +sieurs lignes*/}
+[\n\t\r]                            {/* separator */}
 .                                   { printf("lex: création token %s\n",yytext);
                                         return yytext[0]; }
-
 %%
 int yywrap(void){ return 1; } // function called at the end of the file
