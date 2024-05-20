@@ -28,6 +28,7 @@ int yyerror(const char*); // on fonctions defined by the generator
 
 %start program// main non-terminal
 
+%left '='
 %left AND
 %left EQUALS DIFFERENT_FROM
 %left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
@@ -44,7 +45,9 @@ expression ';'
 |Import IDENT ';'
 
 expression:
-NUMBER|BOOLEAN
+NUMBER
+|BOOLEAN
+|IDENT
 | expression '+' expression 
 | expression '-' expression 
 | expression '*' expression 
@@ -58,6 +61,7 @@ NUMBER|BOOLEAN
 | expression DIFFERENT_FROM expression
 | expression '>' expression
 | expression '<' expression
+| IDENT '=' expression
 | expression AND expression
 | NOT expression %prec NOT
 ;
