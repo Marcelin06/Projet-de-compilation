@@ -19,30 +19,31 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 
 %union { double number ; int boolean ; AST_expr expr ; AST_comm comm ; AST_prog prog ; char* import; char *ident;}
 %token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
-%token <boolean> BOOLEAN
-%token <import> Import
-%token <ident> IDENT
+%token <boolean> BOOLEAN //token for boolean
+%token <import> Import //token for key word import
+%token <ident> IDENT //token for name of variables and functions
 %type <expr> expression 
 %type <comm> command
 %type <prog> program
+%token EQUALS //token for the multisymbol '=='
+%token MORE_THAN_OR_EQUALS //token for the multisymbol '>='
+%token LESS_THAN_OR_EQUALS //token for the multisymbol '<='
+%token DIFFERENT_FROM //token for the multisymbol '!='
+%token NOT //token for !
+%token AND //token for "&&"
 
 
-%token EQUALS // token for the multisymbol "=="
-%token MORE_THAN_OR_EQUALS // token for the multisymbol ">="
-%token LESS_THAN_OR_EQUALS // token for the multisymbol "<="
-%token DIFFERENT_FROM // token for the multisymbol "!="
-%token NOT // token for !
 
 
 %start program // main non-terminal
 
+%left AND
 %left EQUALS DIFFERENT_FROM
 %left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
 %left '+' '-'
 %left '%'
 %left '*' '/'
 %nonassoc UMOINS
-
 
 
 %parse-param {AST_prog *rez}
@@ -57,6 +58,7 @@ program :
                     AST_prog p = NULL;
                     AST_comm c = NULL;
                     $$ = new_prog(c, p); 
+                    *rez = $$;
                 }
     |command program
                 {
@@ -106,6 +108,8 @@ expression:
                 { $$ = new_binary_expr('>',$1,$3); }
     | expression '<' expression
                 { $$ = new_binary_expr('<',$1,$3); }
+    | expression AND expression
+                { $$ = new_binary_expr('A',$1,$3); }
     | NOT expression %prec NOT
                 { $$ = new_unary_expr('!',$2); }
     ;

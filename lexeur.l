@@ -30,6 +30,8 @@ False                               { printf("lex: création token BOOLEAN %s\n"
                                         return BOOLEAN; }
 [=][=]                              { printf("lex: création token EQUALS %s\n",yytext);
                                         return EQUALS; }
+[&][&]                              { printf("lex: création token AND %s\n",yytext);
+                                        return AND; }
 [<][=]                              { printf("lex: création token LESS_THAN_OR_EQUALS %s\n",yytext);
                                         return LESS_THAN_OR_EQUALS; }
 [>][=]                              { printf("lex: création token MORE_THAN_OR_EQUALS %s\n",yytext);
@@ -48,5 +50,6 @@ False                               { printf("lex: création token BOOLEAN %s\n"
                                         return 0; } //separator
 .                                   { printf("lex: création token %s\n",yytext);
                                         return yytext[0]; }
+
 %%
 int yywrap(void){ return 1; } // function called at the end of the file
