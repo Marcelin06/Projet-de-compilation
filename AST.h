@@ -4,6 +4,7 @@ struct _expr_tree {
   char rule;                    /* "name" of the rule/operation operation */
   double number;                /* double  for value */
   int boolean;                  /* 1 for true 0 for false*/
+  char *ident;                   /* terminal iddentifiant*/
   int taille;                   /* taille du noeud*/
   struct _expr_tree* left;      /* NULL if unary node or leaf*/
   struct _expr_tree* right;     /* used for unary node but NULL if leaf */
@@ -14,7 +15,7 @@ typedef struct _expr_tree* AST_expr;
 struct _command_tree {
   char rule;                    /* "name" of the rule/operation operation */
   int taille;                    /* taille du noeud*/
-  AST_expr expr1;     	        /* used for command with at least one sub-expression */
+  struct _expr_tree* expr1;     	        /* used for command with at least one sub-expression */
 };
 
 typedef struct _command_tree* AST_comm;
@@ -22,7 +23,7 @@ typedef struct _command_tree* AST_comm;
 struct _prog_tree {
   char rule;                    /* "name" of the rule/operation operation*/
   int taille;                   /* taille du noeud*/
-  AST_comm com1;                /* first command of the programm, NULL if any*/
+  struct _command_tree* com1;                /* first command of the programm, NULL if any*/
   struct _prog_tree* next;      /* list of program after the first command, NULL if any */
 };
 
@@ -39,6 +40,9 @@ AST_expr new_number_expr(double number);
 
 /* create an AST leaf from a boolean */
 AST_expr new_boolean_expr(int boolean);
+
+/* create an AST leaf from a value */
+AST_expr new_ident_expr(char *ident);
 
 /* create an AST leaf from a value */
 AST_comm new_command(char rule, AST_expr expression);

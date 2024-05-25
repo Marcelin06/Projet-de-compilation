@@ -20,15 +20,22 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
     if('A' == rule){
       t->taille = 3 + t->left->taille + t->right->taille;
     }
-
-    //pour les autres expressions binaires
-    if('A' != rule && 'M' != rule){
-      t->taille = 1 + t->left->taille + t->right->taille;
+    if('=' == rule){
+       
+      t->taille = 1 + t->right->taille;
+      
     }
 
-    
-   
-  } else printf("ERR : MALLOC ");
+    //pour les autres expressions binaires
+    if('A' != rule && 'M' != rule && '=' != rule){
+      t->taille = 1 + t->left->taille + t->right->taille;
+
+    }
+  
+  } else {
+    printf("ERR : MALLOC ");
+  }
+ 
   return t;
 }
 
@@ -65,6 +72,23 @@ AST_expr new_boolean_expr(int boolean){
 }
 
 /* create an AST leaf from a value */
+AST_expr new_ident_expr(char *ident){
+  
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule='v';
+    t->ident=ident;
+    t->taille = 1;
+    t->left=NULL;
+    t->right=NULL;
+  } else {
+    printf("ERR : MALLOC ");
+  }
+  
+  return t;
+}
+
+/* create an AST leaf from a value */
 AST_comm new_command(char rule, AST_expr expression){
   AST_comm t =  malloc(sizeof(struct _command_tree));
   if (t!=NULL){	/* malloc ok */
@@ -73,6 +97,7 @@ AST_comm new_command(char rule, AST_expr expression){
     if(rule == 'c'){
       t->expr1 = expression;
       t->taille = t->expr1->taille;
+      
     }
     if(rule == 'i'){
    
@@ -81,6 +106,7 @@ AST_comm new_command(char rule, AST_expr expression){
     
     
   } else printf("ERR : MALLOC ");
+
   return t;
 
 }
@@ -91,23 +117,26 @@ AST_prog new_prog(AST_comm com1, AST_prog next){
   AST_prog t =  malloc(sizeof(struct _prog_tree));
   
   if (t!=NULL){	/* malloc ok */
-    t->rule = 'p';
+    //t->rule = 'p';
    
     t->com1 = com1;
     t->next = next;
     
-    if(NULL == t->com1 && NULL == next){
-      t->taille = 0;
+    if(NULL == com1 && NULL == next){
+      t = NULL;
+      
     }
-    if(NULL != t->com1 && NULL == next){
-      t->taille = t->com1->taille;
+    else if(NULL != com1 && NULL == next){
+      t->taille = t->com1->taille;      
     }
-    if(NULL == t->com1 && NULL != next){
+    else if(NULL == com1 && NULL != next){
       t->taille = t->next->taille;
     }
-    if(NULL != t->com1 && NULL != next){
-      t->taille = t->com1->taille + t->next->taille;
+    else if(NULL != com1 && NULL != next){
+      t->taille = t->com1->taille + t->next->taille;    
     }
+    else{}
+    
     
   } else printf("ERR : MALLOC function new prog");
   return t;
@@ -118,6 +147,7 @@ AST_prog new_prog(AST_comm com1, AST_prog next){
 void free_expr(AST_expr t)
 {
   if (t!=NULL) {
+    free(t->ident);
     free_expr(t->left);
     free_expr(t->right);
     free(t);
@@ -167,8 +197,12 @@ void print_expr(AST_expr t){
         printf(":False: ");
       }
     }
+    else if(t->rule=='v'){
+      printf(":%s: ",t->ident);
+    }
     else{
       printf(":%c: ",t->rule);
+      
     }
 
     print_expr(t->right);
@@ -184,7 +218,7 @@ void print_comm(AST_comm t){
   if (t!=NULL && t->rule != 'i') {
     
     printf("[ ");
-    printf(":%c: ", t->rule);
+    //printf(":%c: ", t->rule);
     print_expr(t->expr1);
     printf("] ");
   }
@@ -192,15 +226,15 @@ void print_comm(AST_comm t){
 }
 
 void print_prog(AST_prog t){
-  if (t!=NULL && t->com1 != NULL && t->next != NULL) {
-    
-    printf("[ "); 
-    printf(":%c: ", t->rule);
+  if (t!=NULL && t->com1 != NULL) {
+   
+    //printf(":%c: ", t->rule);
     print_comm(t->com1);
+    printf("\n");
     print_prog(t->next);
     
      
-    printf("] ");
+    
   }
   
 }
