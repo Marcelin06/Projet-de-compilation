@@ -29,7 +29,7 @@ int main(int argc, char *args[]) {
 
     
    
-    free_prog(rez);
+    //free_prog(rez);
 
     printf("\n");
 

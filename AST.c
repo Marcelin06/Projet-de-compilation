@@ -204,7 +204,7 @@ void free_comm(AST_comm t)
 void free_prog(AST_prog t){
   if(NULL != t){
     free_comm(t->com1);
-    free(t->next);
+    free_prog(t->next);
     free(t);
   }
 }
@@ -296,27 +296,68 @@ void affichage_code(AST_expr t){
   }
 
   if(t->rule == '+'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nAddiNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nAddiNb");
+    }
+    
   }
 
   if(t->rule == '*'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nMultNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nMultNb");
+    }
   }
 
   if(t->rule == '-'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nSubiNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nSubiNb");
+    }
   }
 
   if(t->rule == '/'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nDiviNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nDiviNb");
+    }
   }
 
   if(t->rule == '%'){
