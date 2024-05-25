@@ -41,14 +41,14 @@ False                               { printf("lex: création token BOOLEAN %s\n"
 [i][m][p][o][r][t][ ]               { printf("lex: création token IMPORT %s\n",yytext);
                                         yylval.import = yytext;
                                         return Import;}
-[a-z,A-Z,$,_][a-z,A-Z,$,_,0-9]*     {printf("lex: création token IDENT %s\n",yytext);
+[a-z][a-z,A-Z,_,0-9]*               {printf("lex: création token IDENT %s\n",yytext);
                                         yylval.ident = yytext;
                                         return IDENT;}
 [!]                                 { printf("lex: création token NOT %s\n",yytext);
                                         return NOT; }
 [/][/].*[\n]+                       {/*commentaires sur une ligne*/} 
 [/][*]([^*]|\*+[^*/])*[*]+[/]       {/*commentaires sur +sieurs lignes*/}
-[\n\t\r]                            {/* separator */}
+
 .                                   { printf("lex: création token %s\n",yytext);
                                         return yytext[0]; }
 %%

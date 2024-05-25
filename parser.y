@@ -37,6 +37,7 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 
 %start program // main non-terminal
 
+%left '='
 %left AND
 %left EQUALS DIFFERENT_FROM
 %left MORE_THAN_OR_EQUALS LESS_THAN_OR_EQUALS '<' '>'
@@ -62,26 +63,27 @@ program :
                 }
     |command program
                 {
-                    
-                    $$ = new_prog($1, $2);  
+                    $$ = new_prog($1, $2);
                     *rez = $$;              
                 } 
     
     ;
 
 
-command:
+command :
     expression ';'
                 {$$ = new_command('c', $1);}
     |Import IDENT ';'
                 {   AST_expr e = NULL;
-                    $$ = new_command('i', e);}
-expression:
-
+                    $$ = new_command('i', new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")));}
+expression : 
     BOOLEAN
                 { $$ = new_boolean_expr($1); }     
     |NUMBER
                 { $$ = new_number_expr($1); }
+    |IDENT 
+                {
+                    $$ = new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")); }
     | expression '+' expression
                 { $$ = new_binary_expr('+',$1,$3); }
     | expression '-' expression
@@ -108,6 +110,8 @@ expression:
                 { $$ = new_binary_expr('>',$1,$3); }
     | expression '<' expression
                 { $$ = new_binary_expr('<',$1,$3); }
+    | IDENT '=' expression
+                { $$ = new_binary_expr('=',new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")),$3);}
     | expression AND expression
                 { $$ = new_binary_expr('A',$1,$3); }
     | NOT expression %prec NOT
