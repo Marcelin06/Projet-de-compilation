@@ -11,10 +11,14 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
     t->rule=rule;
     t->left=left;
     t->right=right;
-
+    t->is_it_calculable = 0;
     //pour les expressions : -exprression
     if(rule == 'M'){
       t->taille = 1 + t->right->taille;
+      if(1 == t->right->is_it_calculable){
+        t->value = t->right->value;
+        t->is_it_calculable = 1;
+      }
     }
     //pour les expressions : expression && expression
     if('A' == rule){
@@ -31,10 +35,42 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
       t->taille = 1 + t->left->taille + t->right->taille;
 
     }
+
+    if('+' == rule){
+      if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
+        t->value = t->right->value + t->left->value;
+        t->is_it_calculable = 1;
+      }
+    }
+
+    if('-' == rule){
+      if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
+        t->value = t->right->value - t->left->value;
+        t->is_it_calculable = 1;
+      }
+    }
+
+    if('*' == rule){
+      if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
+        t->value = t->right->value * t->left->value;
+        t->is_it_calculable = 1;
+      }
+    }
   
+    if('/' == rule){
+      if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
+        t->value = t->right->value / t->left->value;
+        t->is_it_calculable = 1;
+      }
+    }
+
+    
+
   } else {
     printf("ERR : MALLOC ");
   }
+
+  
  
   return t;
 }
@@ -51,6 +87,8 @@ AST_expr new_number_expr(double number){
   if (t!=NULL){	/* malloc ok */
     t->rule='N';
     t->number=number;
+    t->value = number;
+    t->is_it_calculable = 1;
     t->taille = 1;
     t->left=NULL;
     t->right=NULL;
@@ -64,6 +102,7 @@ AST_expr new_boolean_expr(int boolean){
   if (t!=NULL){	/* malloc ok */
     t->rule='B';
     t->boolean=boolean;
+    t->is_it_calculable = 0;
     t->taille = 1;
     t->left=NULL;
     t->right=NULL;
@@ -78,6 +117,7 @@ AST_expr new_ident_expr(char *ident){
   if (t!=NULL){	/* malloc ok */
     t->rule='v';
     t->ident=ident;
+    t->is_it_calculable = 0;
     t->taille = 1;
     t->left=NULL;
     t->right=NULL;
@@ -164,7 +204,7 @@ void free_comm(AST_comm t)
 void free_prog(AST_prog t){
   if(NULL != t){
     free_comm(t->com1);
-    free(t->next);
+    free_prog(t->next);
     free(t);
   }
 }
@@ -256,27 +296,68 @@ void affichage_code(AST_expr t){
   }
 
   if(t->rule == '+'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nAddiNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nAddiNb");
+    }
+    
   }
 
   if(t->rule == '*'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nMultNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nMultNb");
+    }
   }
 
   if(t->rule == '-'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nSubiNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nSubiNb");
+    }
   }
 
   if(t->rule == '/'){
-    affichage_code(t->left);
-    affichage_code(t->right);
-    printf("\nDiviNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+       printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->left);
+      affichage_code(t->right);
+      printf("\nDiviNb");
+    }
   }
 
   if(t->rule == '%'){

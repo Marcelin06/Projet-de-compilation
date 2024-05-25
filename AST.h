@@ -3,9 +3,11 @@
 struct _expr_tree {
   char rule;                    /* "name" of the rule/operation operation */
   double number;                /* double  for value */
+  int is_it_calculable;          /*pour savoir si on peut l'expr, si ce n'est pas une variable*/
   int boolean;                  /* 1 for true 0 for false*/
   char *ident;                   /* terminal iddentifiant*/
   int taille;                   /* taille du noeud*/
+  double value;                 /*value of the expression if it does not contain variables and if it is a number*/
   struct _expr_tree* left;      /* NULL if unary node or leaf*/
   struct _expr_tree* right;     /* used for unary node but NULL if leaf */
 };
