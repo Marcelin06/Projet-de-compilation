@@ -33,6 +33,8 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %token AND //token for "&&"
 %token IF
 %token ELSE
+%token DO
+%token WHILE
 
 
 
@@ -71,6 +73,7 @@ program :
     
     ;
 
+
 command :
     expression ';'
                 {$$ = new_command('c', $1);}
@@ -78,10 +81,19 @@ command :
                 {   AST_expr e = NULL;
                     $$ = new_command('i', new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")));
                 }
-    |IF expression command ELSE command
+    |IF '(' expression ')' '{' command '}' ELSE '{' command '}'
                 {
-                    $$ = new_if_then_else_command('f', $2, $3, $5);
+                    $$ = new_if_then_else_command('f', $3, $6, $10);
                 }
+    |WHILE '(' expression ')' '{' command '}'
+                {
+                    $$ = new_while_command('w', $3, $6);
+                }
+    |DO '{' command '}' WHILE '(' expression ')'
+                {
+                    $$ = new_do_while_command('d', $3, $7);
+                }
+
 
 expression : 
     BOOLEAN
