@@ -18,13 +18,15 @@ struct _command_tree {
   /* "name" of the rule/operation operation 
   *'c' for command like : expression ;
   *'i' for command like : import IDENT;
+  *'w' for command like : while exprssion command
+  *'d' for command like : do dommand while expreesion
   *'f' for command like : if expression command else command
   */
   char rule;                    
   int taille;                    /* taille du noeud*/
-  struct _expr_tree* expr1;      /* used for command with at least one sub-expression */
+  struct _expr_tree* expr1;      /* used for command with at least one sub-expression or for do_while and while command*/
   struct _expr_tree* expr_if;    /* used for the expression inside the ifthenelse*/
-  struct _command_tree* com1;    /* used for the first command to evaluate inside the if_the_else command*/
+  struct _command_tree* com1;    /* used for the first command to evaluate inside the if_the_else command or for while and do_while command*/
   struct _command_tree* com2;    /* used for the 2nd command to evaluate inside the if_then_else command*/
 };
 
@@ -59,6 +61,12 @@ AST_comm new_command(char rule, AST_expr expression);
 
 /* create an AST leaf from a value */
 AST_comm new_if_then_else_command(char rule, AST_expr expr_if, AST_comm com1, AST_comm com2);
+
+/* create an AST leaf from a value */
+AST_comm new_while_command(char rule, AST_expr expr1, AST_comm com1);
+
+/* create an AST leaf from a value */
+AST_comm new_do_while_command(char rule, AST_comm com1,AST_expr expr1);
 
 /* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next);

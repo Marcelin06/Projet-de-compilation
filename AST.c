@@ -166,6 +166,34 @@ AST_comm new_if_then_else_command(char rule, AST_expr expr_if, AST_comm com1, AS
   return t;
 }
 
+/* create an AST leaf from a value */
+AST_comm new_while_command(char rule, AST_expr expr1, AST_comm com1){
+  AST_comm t =  malloc(sizeof(struct _command_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = rule;
+    t->expr1 = expr1;
+    t->com1 = com1;
+    t->taille = 2 + expr1->taille + com1->taille;  
+    
+  } else printf("ERR : MALLOC ");
+
+  return t;
+}
+
+/* create an AST leaf from a value */
+AST_comm new_do_while_command(char rule, AST_comm com1,AST_expr expr1){
+  AST_comm t =  malloc(sizeof(struct _command_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = rule;
+    t->expr1 = expr1;
+    t->com1 = com1;
+    t->taille = 2 + expr1->taille + com1->taille;  
+    
+  } else printf("ERR : MALLOC ");
+
+  return t;
+}
+
 
 /* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next){
@@ -289,6 +317,24 @@ void print_comm(AST_comm t){
       print_comm(t->com2);
       printf("] \n");
 
+    }
+
+    if('w' == t->rule){
+      printf("[ while( ");
+      print_expr(t->expr1);
+      printf(")\n\t");
+      print_comm(t->com1);
+
+      printf("] \n");
+    }
+
+    if('d' == t->rule){
+      printf("[ do \n\t");
+      print_comm(t->com1);
+      printf("[ while ( ");
+      print_expr(t->expr1);
+      printf(" ) ]");
+      printf("\n] \n");
     }
   }
 

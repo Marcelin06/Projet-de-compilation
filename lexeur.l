@@ -38,9 +38,13 @@ False                               { printf("lex: création token BOOLEAN %s\n"
                                         return MORE_THAN_OR_EQUALS; }
 [!][=]                              { printf("lex: création token DIFFERENT_FROM %s\n",yytext);
                                         return DIFFERENT_FROM; }
-[ ]*[i][f][ ]*                      { printf("lex: création token IF %s\n", yytext);
+[i][f]                              { printf("lex: création token IF %s\n", yytext);
                                             return IF; }
-[ ]*[E][l][s][e][ ]*                { printf("lex: création token ELSE %s\n", yytext);
+[d][o]                              { printf("lex: création token DO %s\n", yytext);
+                                            return DO; }
+[w][h][i][l][e]                     { printf("lex: création token WHILE %s\n", yytext);
+                                            return WHILE; }
+[e][l][s][e]                        { printf("lex: création token ELSE %s\n", yytext);
                                             return ELSE; }
 [i][m][p][o][r][t][ ]               { printf("lex: création token IMPORT %s\n",yytext);
                                         yylval.import = yytext;
@@ -52,6 +56,7 @@ False                               { printf("lex: création token BOOLEAN %s\n"
                                         return NOT; }
 [/][/].*[\n]+                       {/*commentaires sur une ligne*/} 
 [/][*]([^*]|\*+[^*/])*[*]+[/]       {/*commentaires sur +sieurs lignes*/}
+[\n\t\r ]                           {/*separateurs*/}
 .                                   { printf("lex: création token %s\n",yytext);
                                         return yytext[0]; }
 %%
