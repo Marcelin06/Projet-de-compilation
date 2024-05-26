@@ -31,6 +31,7 @@ struct _command_tree {
   *'w' for command like : while exprssion command
   *'d' for command like : do dommand while expreesion
   *'f' for command like : if expression command else command
+  *'n' for command like : ;
   */
   char rule;                    
   int taille;                    /* taille du noeud*/
@@ -38,6 +39,7 @@ struct _command_tree {
   struct _expr_tree* expr_if;    /* used for the expression inside the ifthenelse*/
   struct _command_tree* com1;    /* used for the first command to evaluate inside the if_the_else command or for while and do_while command*/
   struct _command_tree* com2;    /* used for the 2nd command to evaluate inside the if_then_else command*/
+  struct _prog_tree* prog;       /* udes for a program son*/
 };
 
 typedef struct _command_tree* AST_comm;
@@ -76,10 +78,18 @@ AST_comm new_if_then_else_command(char rule, AST_expr expr_if, AST_comm com1, AS
 AST_comm new_while_command(char rule, AST_expr expr1, AST_comm com1);
 
 /* create an AST leaf from a value */
-AST_comm new_do_while_command(char rule, AST_comm com1,AST_expr expr1);
+AST_comm new_do_while_command(char rule, AST_comm com1, AST_expr expr1);
+
+/* create an AST leaf from a value */
+AST_comm new_command_prog(char rule, AST_prog p);
+
+/* create an AST leaf from a value */
+AST_comm new_null_command(char rule);
 
 /* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next);
+
+
 
 /* delete an AST */
 void free_expr(AST_expr t);
