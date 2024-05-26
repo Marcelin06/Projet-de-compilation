@@ -26,6 +26,8 @@ int yyerror(const char*); // on fonctions defined by the generator
 %token AND //token for "&&"
 %token IF
 %token ELSE
+%token DO
+%token WHILE
 
 
 
@@ -49,7 +51,9 @@ program :
 command : 
 expression ';' 
 |Import IDENT ';'
-|IF expression command ELSE command
+|IF '(' expression ')' '{' command '}' ELSE '{' command '}'
+|WHILE '(' expression ')' '{' command '}'
+|DO '{' command '}' WHILE '(' expression ')'
 
 expression:
 NUMBER
