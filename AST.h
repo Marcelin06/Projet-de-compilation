@@ -1,7 +1,17 @@
 
 /* unary-and-binary tree structure */
 struct _expr_tree {
-  char rule;                    /* "name" of the rule/operation operation */
+  /* "name" of the rule/operation operation 
+  * 'A' for && (AND)
+  * 'M' for - (operation unaire)
+  * 'E' for == (EQULAS)
+  * 'G' for >=  
+  * 'L' for <=
+  * 'D' for !=
+  * '!' for the negation 
+  *
+  */
+  char rule;                    
   double number;                /* double  for value */
   int is_it_calculable;          /*pour savoir si on peut l'expr, si ce n'est pas une variable*/
   int boolean;                  /* 1 for true 0 for false*/
@@ -15,9 +25,17 @@ struct _expr_tree {
 typedef struct _expr_tree* AST_expr;
 
 struct _command_tree {
-  char rule;                    /* "name" of the rule/operation operation */
+  /* "name" of the rule/operation operation 
+  *'c' for command like : expression ;
+  *'i' for command like : import IDENT;
+  *'f' for command like : if expression command else command
+  */
+  char rule;                    
   int taille;                    /* taille du noeud*/
-  struct _expr_tree* expr1;     	        /* used for command with at least one sub-expression */
+  struct _expr_tree* expr1;      /* used for command with at least one sub-expression */
+  struct _expr_tree* expr_if;    /* used for the expression inside the ifthenelse*/
+  struct _command_tree* com1;    /* used for the first command to evaluate inside the if_the_else command*/
+  struct _command_tree* com2;    /* used for the 2nd command to evaluate inside the if_then_else command*/
 };
 
 typedef struct _command_tree* AST_comm;
@@ -50,6 +68,9 @@ AST_expr new_ident_expr(char *ident);
 AST_comm new_command(char rule, AST_expr expression);
 
 /* create an AST leaf from a value */
+AST_comm new_if_then_else_command(char rule, AST_expr expr_if, AST_comm com1, AST_comm com2);
+
+/* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next);
 
 /* delete an AST */
@@ -63,10 +84,14 @@ void print_comm(AST_comm t);
 
 
 
-/* affichage post-fix*/
+/* affichage post-fix du code assembleur d'une expression*/
 void affichage_code(AST_expr t);
 
+/* affichage post-fix du code assembleur d'un programme*/
 void affichage_code_prog(AST_prog p);
+
+/* affichage post-fix du code assembleur d'une commande*/
+void affichage_code_com(AST_comm c);
 
 
 
