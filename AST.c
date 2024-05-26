@@ -199,6 +199,24 @@ AST_comm new_do_while_command(char rule, AST_comm com1,AST_expr expr1){
   return t;
 }
 
+/* create an AST leaf from a value */
+AST_comm new_command_prog(char rule, AST_prog p){
+  AST_comm t =  malloc(sizeof(struct _command_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = rule;
+    t->prog = p;
+    t->taille = p->taille; 
+    
+  } else printf("ERR : MALLOC ");
+
+  return t;
+}
+
+/* create an AST leaf from a value */
+AST_comm new_null_command(char rule){
+  return NULL;
+}
+
 
 /* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next){
@@ -341,6 +359,12 @@ void print_comm(AST_comm t){
       printf(" ) ]");
       printf("\n] \n");
     }
+
+    if('p' == t->rule){
+      print_prog(t->prog);
+    }
+
+    
   }
 
 }
@@ -559,6 +583,10 @@ void affichage_code_com(AST_comm c){
     affichage_code(c->expr1);
     printf("\nCondJmp 1");
     printf("\nJump %d", - (2 + c->com1->taille + c->expr1->taille));
+  }
+
+  if('p' == c->rule){
+    affichage_code_prog(c->prog);
   }
 }
 

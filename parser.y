@@ -81,6 +81,19 @@ command :
                 {   AST_expr e = NULL;
                     $$ = new_command('i', new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")));
                 }
+    |';'
+                {
+                    $$ = new_null_command('n');
+                }
+
+    |'{' program '}'
+                {
+                    $$ = new_command_prog('p', $2);
+                }
+    |program
+                {
+                    $$ = new_command_prog('p', $1);
+                }
     |IF '(' expression ')' '{' command '}' ELSE '{' command '}'
                 {
                     $$ = new_if_then_else_command('f', $3, $6, $10);
