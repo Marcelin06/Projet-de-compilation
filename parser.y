@@ -50,6 +50,9 @@ program :
 command : 
 expression ';' 
 |Import IDENT ';'
+|';'
+|'{' program '}'
+|program
 |IF '(' expression ')' '{' command '}' ELSE '{' command '}'
 |WHILE '(' expression ')' '{' command '}'
 |DO '{' command '}' WHILE '(' expression ')'
