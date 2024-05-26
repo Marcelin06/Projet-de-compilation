@@ -15,9 +15,17 @@ struct _expr_tree {
 typedef struct _expr_tree* AST_expr;
 
 struct _command_tree {
-  char rule;                    /* "name" of the rule/operation operation */
+  /* "name" of the rule/operation operation 
+  *'c' for command like : expression ;
+  *'i' for command like : import IDENT;
+  *'f' for command like : if expression command else command
+  */
+  char rule;                    
   int taille;                    /* taille du noeud*/
-  struct _expr_tree* expr1;     	        /* used for command with at least one sub-expression */
+  struct _expr_tree* expr1;      /* used for command with at least one sub-expression */
+  struct _expr_tree* expr_if;    /* used for the expression inside the ifthenelse*/
+  struct _command_tree* com1;    /* used for the first command to evaluate inside the if_the_else command*/
+  struct _command_tree* com2;    /* used for the 2nd command to evaluate inside the if_then_else command*/
 };
 
 typedef struct _command_tree* AST_comm;
@@ -48,6 +56,9 @@ AST_expr new_ident_expr(char *ident);
 
 /* create an AST leaf from a value */
 AST_comm new_command(char rule, AST_expr expression);
+
+/* create an AST leaf from a value */
+AST_comm new_if_then_else_command(char rule, AST_expr expr_if, AST_comm com1, AST_comm com2);
 
 /* create an AST leaf from a value */
 AST_prog new_prog(AST_comm com1, AST_prog next);
