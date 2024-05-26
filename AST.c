@@ -363,6 +363,8 @@ void print_comm(AST_comm t){
     if('p' == t->rule){
       print_prog(t->prog);
     }
+
+    
   }
 
 }
@@ -581,6 +583,10 @@ void affichage_code_com(AST_comm c){
     affichage_code(c->expr1);
     printf("\nCondJmp 1");
     printf("\nJump %d", - (2 + c->com1->taille + c->expr1->taille));
+  }
+
+  if('p' == c->rule){
+    affichage_code_prog(c->prog);
   }
 }
 

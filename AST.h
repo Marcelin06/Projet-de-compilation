@@ -32,6 +32,7 @@ struct _command_tree {
   *'d' for command like : do dommand while expreesion
   *'f' for command like : if expression command else command
   *'n' for command like : ;
+  *'p' for command like : program or {program}
   */
   char rule;                    
   int taille;                    /* taille du noeud*/
