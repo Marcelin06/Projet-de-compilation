@@ -24,6 +24,8 @@ int yyerror(const char*); // on fonctions defined by the generator
 %token DIFFERENT_FROM //token for the multisymbol '!='
 %token NOT //token for !
 %token AND //token for "&&"
+%token IF
+%token ELSE
 
 
 %start program// main non-terminal
@@ -39,10 +41,14 @@ int yyerror(const char*); // on fonctions defined by the generator
 %nonassoc NOT
 %%
 
-program : /* empty */ |command program
+program : 
+/* empty */ 
+|command program
+
 command : 
 expression ';' 
 |Import IDENT ';'
+|IF expression command ELSE command
 
 expression:
 NUMBER
