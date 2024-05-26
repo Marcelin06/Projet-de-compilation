@@ -12,7 +12,7 @@ int main(int argc, char *args[]) {
     extern FILE* yyin;
     yyin = fopen(args[1], "r");
     if (!yyparse()) { // call to the parsing (and lexing) function
-        printf("\nParsing:: c'est bien un programme Javascript\n"); // reached if parsing follows
+        printf("\nParsing:: c'est bien un programme Javascript valide\n"); // reached if parsing follows
     }
     exit(EXIT_SUCCESS);
 }
