@@ -14,8 +14,11 @@ int main(int argc, char *args[]) {
     yyin = fopen(args[1], "r");
     AST_prog rez;
     
+    
     if (!yyparse(&rez)) { // call to the parsing (and lexing) function
+
         printf("\nParsing:: c'est bien un programme JavaScript valide\n"); // reached if parsing follows
+
     }
     
     printf("\naffichage du programme : \n\n");
