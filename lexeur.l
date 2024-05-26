@@ -32,12 +32,17 @@ False                                   { printf("lex: création token BOOLEAN %
                                             return MORE_THAN_OR_EQUALS; }
 [!][=]                                  { printf("lex: création token DIFFERENT_FROM %s\n",yytext);
                                             return DIFFERENT_FROM; } 
+[ ]*[i][f][ ]*                          { printf("lex: création token IF %s\n", yytext);
+                                            return IF; }
+[ ]*[E][l][s][e][ ]*                        { printf("lex: création token ELSE %s\n", yytext);
+                                            return ELSE; }
 [i][m][p][o][r][t][ ]                   { printf("lex: création token %s\n",yytext);
                                             return Import; }
-[a-z,A-Z,$,_][a-z,A-Z,$,_,0-9]*         { printf("lex: création token IDENT %s\n",yytext);
+[a-z][a-z,A-Z,_,0-9]*                   { printf("lex: création token IDENT %s\n",yytext);
                                             return IDENT; }
 [!]                                     { printf("lex: création token NOT %s\n",yytext);
-                                            return NOT; }   
+                                            return NOT; }  
+
 [/][/].*[\n]+                           {/*commentaires sur une ligne*/} 
 [/][*]([^*]|\*+[^*/])*[*]+[/]           {/*commentaires sur +sieurs lignes*/}
 [\n\t\r]                                {/* separator */}
