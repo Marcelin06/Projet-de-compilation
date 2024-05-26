@@ -16,8 +16,9 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
     if(rule == 'M'){
       t->taille = 1 + t->right->taille;
       if(1 == t->right->is_it_calculable){
-        t->value = t->right->value;
+        t->value = -(t->right->value);
         t->is_it_calculable = 1;
+        t->taille--;
       }
     }
     //pour les expressions : expression && expression
@@ -40,6 +41,7 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
       if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
         t->value = t->right->value + t->left->value;
         t->is_it_calculable = 1;
+        t->taille -=2;
       }
     }
 
@@ -47,6 +49,7 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
       if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
         t->value = t->right->value - t->left->value;
         t->is_it_calculable = 1;
+        t->taille -=2;
       }
     }
 
@@ -54,13 +57,15 @@ AST_expr new_binary_expr(char rule, AST_expr left, AST_expr right) {
       if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
         t->value = t->right->value * t->left->value;
         t->is_it_calculable = 1;
+         t->taille -=2;
       }
     }
   
     if('/' == rule){
       if((1 == t->right->is_it_calculable) && (1 == t->left->is_it_calculable)){
-        t->value = t->right->value / t->left->value;
+        t->value = t->left->value / t->right->value;
         t->is_it_calculable = 1;
+         t->taille -=2;
       }
     }
 
@@ -149,6 +154,21 @@ AST_comm new_command(char rule, AST_expr expression){
 
   return t;
 
+}
+
+/* create an AST leaf from a value */
+AST_comm new_if_then_else_command(char rule, AST_expr expr_if, AST_comm com1, AST_comm com2){
+  AST_comm t =  malloc(sizeof(struct _command_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = rule;
+    t->expr_if = expr_if;
+    t->com1 = com1;
+    t->com2 = com2;
+    t->taille = 2 + expr_if->taille + com1->taille + com2->taille;    
+    
+  } else printf("ERR : MALLOC ");
+
+  return t;
 }
 
 
@@ -255,18 +275,32 @@ void print_expr(AST_expr t){
 
 void print_comm(AST_comm t){
   
-  if (t!=NULL && t->rule != 'i') {
-    
-    printf("[ ");
-    //printf(":%c: ", t->rule);
-    print_expr(t->expr1);
-    printf("] ");
+  if (t!=NULL) {
+    if('c' == t->rule){
+      printf("[ ");
+      //printf(":%c: ", t->rule);
+      print_expr(t->expr1);
+      printf("] \n");
+    }
+
+    if('f' == t->rule){
+      printf("[ if( ");
+
+      print_expr(t->expr_if);
+      printf(")\n\t");
+      print_comm(t->com1);
+      printf("Else");
+      printf("\n\t");
+      print_comm(t->com2);
+      printf("] \n");
+
+    }
   }
 
 }
 
 
-/* affichage code*/
+/* affichage post-fix du code assembleur d'une expression*/
 void affichage_code(AST_expr t){
   
   /*if((NULL == t->left) && (NULL == t->right)){
@@ -367,8 +401,21 @@ void affichage_code(AST_expr t){
   }
 
   if((t->rule == 'M')){
-    affichage_code(t->right);
-    printf("\nNegaNb");
+    if(1 == t->is_it_calculable){
+      if(t->value >= 1000.0 || t->value <= 0.001){
+        printf("\nCsteNb %.3e",t->value);
+      }
+      else{
+        printf("\nCsteNb %.3lf",t->value);
+      }
+    }
+    else{
+      affichage_code(t->right);
+      printf("\nNegaNb");
+    }
+    
+    
+    
   } 
 
   if(t->rule == 'E'){
@@ -436,14 +483,32 @@ void affichage_code(AST_expr t){
 }
 
 
+/* affichage post-fix du code assembleur d'une commande*/
+void affichage_code_com(AST_comm c){
+  if(NULL == c){
+    return;
+  }
+
+  if('c' == c->rule){
+    affichage_code(c->expr1);
+  }
+
+  if('f' == c->rule){
+    affichage_code(c->expr_if);
+    printf("\nCondJmp %d", c->com1->taille + 1);
+    affichage_code_com(c->com1);
+    printf("\nJump %d", c->com2->taille);
+    affichage_code_com(c->com2);
+  }
+}
+
+/* affichage post-fix du code assembleur d'un programme*/
 void affichage_code_prog(AST_prog p){
   if(NULL == p || NULL == p->com1){
     return;
   }
 
-  if(p->com1->rule != 'i'){
-    affichage_code(p->com1->expr1);
-  }
+  affichage_code_com(p->com1);
   
   affichage_code_prog(p->next);
 }

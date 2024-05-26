@@ -31,6 +31,8 @@ int yyerror(AST_prog *arg, const char*); // on fonctions defined by the generato
 %token DIFFERENT_FROM //token for the multisymbol '!='
 %token NOT //token for !
 %token AND //token for "&&"
+%token IF
+%token ELSE
 
 
 
@@ -69,21 +71,25 @@ program :
     
     ;
 
-
 command :
     expression ';'
                 {$$ = new_command('c', $1);}
     |Import IDENT ';'
                 {   AST_expr e = NULL;
-                    $$ = new_command('i', new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")));}
+                    $$ = new_command('i', new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")));
+                }
+    |IF expression command ELSE command
+                {
+                    $$ = new_if_then_else_command('f', $2, $3, $5);
+                }
+
 expression : 
     BOOLEAN
                 { $$ = new_boolean_expr($1); }     
     |NUMBER
                 { $$ = new_number_expr($1); }
     |IDENT 
-                {
-                    $$ = new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")); }
+                { $$ = new_ident_expr(strtok($1, "=;+-=*/*<%!>.()")); }
     | expression '+' expression
                 { $$ = new_binary_expr('+',$1,$3); }
     | expression '-' expression
